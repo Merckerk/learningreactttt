@@ -50,13 +50,10 @@ export default function Board() {
   useEffect(() => {
     console.log("squares: ", squares);
   }, [squares]);
-  // const winner = calculateWinner(squares);
-  // let status;
-  // if (winner) {
-  //   status = "Winner: " + winner;
-  // } else {
-  //   status = "Next player: " + (xIsNext ? "X" : "O");
-  // }
+
+  useEffect(() => {
+    saveGameResult(status, squares);
+  }, [isFinished]);
 
   return (
     <div>
@@ -98,4 +95,22 @@ function calculateWinner(squares) {
     }
   }
   return null;
+}
+
+//saveResults function.
+function saveGameResult(sStat, sSquares) {
+  console.log("Saving status: ", sStat);
+  console.log("Saving sBoard: ", sSquares);
+
+  const sSquaresJSON = JSON.stringify(sSquares);
+  fetch("C:/xampp/htdocs/learningreactttt/src/public/save_result.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: `winner=${sStat}&board=${sSquaresJSON}`,
+  })
+    .then((response) => response.text())
+    .then((result) => console.log(result))
+    .catch((error) => console.error("Error:", error));
 }

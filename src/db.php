@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "tictactoe2";
+$dbname = "tictactoe3";
 
 //Create sql query from the provided db paremeters
 $conn = new mysqli($servername, $username, $password, $dbname);

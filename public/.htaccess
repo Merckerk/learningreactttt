@@ -1,0 +1,6 @@
+RewriteEngine On
+RewriteBase /learningreactttt
+RewriteRule ^index\.html$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /learningreactttt/index.html [L]
