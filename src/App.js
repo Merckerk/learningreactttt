@@ -1,7 +1,7 @@
-import React from 'react';
-import { useState } from 'react';
+import React from "react";
+import { useState, useEffect } from "react";
 
-function Square({value, onSquareClick}) {
+function Square({ value, onSquareClick }) {
   return (
     <button className="square" onClick={onSquareClick}>
       {value}
@@ -12,6 +12,8 @@ function Square({value, onSquareClick}) {
 export default function Board() {
   const [xIsNext, setXIsNext] = useState(true);
   const [squares, setSquares] = useState(Array(9).fill(null));
+  const [isFinished, setIsFinished] = useState(false);
+  const [status, setStatus] = useState(null);
 
   function handleClick(i) {
     if (calculateWinner(squares) || squares[i]) {
@@ -19,21 +21,42 @@ export default function Board() {
     }
     const nextSquares = squares.slice();
     if (xIsNext) {
-      nextSquares[i] = 'X';
+      nextSquares[i] = "X";
     } else {
-      nextSquares[i] = 'O';
+      nextSquares[i] = "O";
     }
     setSquares(nextSquares);
     setXIsNext(!xIsNext);
   }
 
-  const winner = calculateWinner(squares);
-  let status;
-  if (winner) {
-    status = 'Winner: ' + winner;
-  } else {
-    status = 'Next player: ' + (xIsNext ? 'X' : 'O');
-  }
+  useEffect(() => {
+    const winner = calculateWinner(squares);
+    if (winner) {
+      setStatus("Winner: " + winner);
+      setIsFinished(true);
+    } else if (squares.every((sqr) => sqr !== null)) {
+      // If all squares are filled, and there's no winner, it's a draw
+      setIsFinished(true);
+      setStatus("Draw");
+    } else {
+      setStatus("Next player: " + (xIsNext ? "X" : "O"));
+    }
+  }, [squares]);
+
+  useEffect(() => {
+    console.log("status: ", status);
+  }, [status]);
+
+  useEffect(() => {
+    console.log("squares: ", squares);
+  }, [squares]);
+  // const winner = calculateWinner(squares);
+  // let status;
+  // if (winner) {
+  //   status = "Winner: " + winner;
+  // } else {
+  //   status = "Next player: " + (xIsNext ? "X" : "O");
+  // }
 
   return (
     <div>
